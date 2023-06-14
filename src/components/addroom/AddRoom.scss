@@ -1,0 +1,57 @@
+.add-room-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+  }
+  .selecthotelid {
+    border: none;
+    outline: none;
+    background-color: grey;
+    padding: 9px;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.9rem;
+  }
+}
+.roomnumber {
+  border: none;
+  outline: none;
+  background-color: rgb(227, 220, 220);
+  padding: 9px;
+  border-radius: 6px;
+  color: rgb(112, 107, 107);
+  font-size: 0.9rem;
+}
+.btn {
+  align-self: center;
+  max-width: max-content;
+  width: fit-content;
+  border: none;
+  outline: none;
+  background-color: rgb(79, 194, 79);
+  color: white;
+  font-size: 1.3rem;
+  border-radius: 20px;
+}

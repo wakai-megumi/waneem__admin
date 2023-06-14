@@ -1,0 +1,148 @@
+// EditHotel.scss
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+  .loading,
+  .error {
+    color: red;
+  }
+
+  .add-hotel-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      width: 70%;
+
+      .logo-section,
+      .hotel-photos {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .image {
+          width: 150px;
+          height: 150px;
+          overflow: hidden;
+          border-radius: 0.25rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+
+        .placeholder {
+          width: 150px;
+          height: 150px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f1f1f1;
+          color: #666;
+          border-radius: 0.25rem;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-section {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          .upload-icon {
+            background-color: #ddd;
+            color: #666;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #ccc;
+            }
+          }
+
+          input[type="file"] {
+            display: none;
+          }
+
+          button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #0056b3;
+            }
+
+            &:disabled {
+              background-color: #ddd;
+              cursor: not-allowed;
+            }
+          }
+        }
+
+        h6 {
+          margin-top: 0.5rem;
+          font-size: 0.875rem;
+          color: #666;
+        }
+      }
+
+      .input-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+          font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+          padding: 0.75rem;
+          border-radius: 0.25rem;
+          border: 1px solid #ccc;
+          font-size: 1rem;
+        }
+
+        .checkbox {
+          display: flex;
+          align-items: center;
+
+          input[type="checkbox"] {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    align-self: flex-start;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+}

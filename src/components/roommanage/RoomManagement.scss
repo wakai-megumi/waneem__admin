@@ -1,0 +1,115 @@
+.rooms-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #fbf6f6;
+  font-family: Arial, sans-serif;
+
+  .rooms-heading {
+    font-size: 36px;
+    padding: 9px 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .add-new-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #337ab7;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .room-details {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+
+    th,
+    td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+
+    .room-image {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+      border-radius: 50%;
+      vertical-align: middle;
+    }
+
+    .room-name {
+      font-weight: bold;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    .view-button,
+    .delete-button {
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      outline: none;
+      margin: 0 1rem;
+      cursor: pointer;
+    }
+
+    .view-button {
+      background-color: #5cb85c;
+      color: #fff;
+    }
+
+    .delete-button {
+      background-color: #d9534f;
+      color: #fff;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .room-details {
+      th,
+      td {
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .room-image {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+      }
+
+      .action-buttons {
+        gap: 2px;
+      }
+
+      .view-button,
+      .delete-button {
+        font-size: 12px;
+      }
+    }
+  }
+}

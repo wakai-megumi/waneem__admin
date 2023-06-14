@@ -1,0 +1,50 @@
+.sidebar {
+  background-color: #f0f0f0;
+  padding: 20px;
+
+  h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 5px;
+
+      .link {
+        border: none;
+        outline: none;
+        font-size: 15px;
+        cursor: pointer;
+        > p {
+          color: #333;
+          transition: color 0.3s;
+          font-weight: 300;
+          margin-left: -5px;
+          &:hover {
+            color: #888;
+          }
+        }
+      }
+
+      a {
+        text-decoration: none;
+        color: #333;
+        transition: color 0.3s;
+
+        &:hover {
+          color: #888;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+}

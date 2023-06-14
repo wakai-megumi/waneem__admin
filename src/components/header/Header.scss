@@ -1,0 +1,95 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f0f0f0;
+  position: fixed;
+  width: 100%;
+  padding: 0 3rem;
+  top: 0;
+  z-index: 999;
+  left: 0;
+
+  .logo a {
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .navigation {
+    ul {
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 7 rem;
+      li {
+        margin-right: 10px;
+
+        a {
+          text-decoration: none;
+          color: #333;
+          transition: color 0.3s;
+
+          &:hover {
+            color: #888;
+          }
+        }
+      }
+    }
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    margin: 0 6rem 0 0;
+
+    .username {
+      margin-right: 10px;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+      cursor: pointer;
+
+      &:hover {
+        outline: 2px double rgb(19, 43, 43);
+      }
+    }
+
+    button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      color: #333;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #888;
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .navigation {
+      ul {
+        flex-direction: column;
+
+        li {
+          margin-right: 0;
+          margin-bottom: 10px;
+        }
+      }
+    }
+
+    .user-profile {
+      .username {
+        display: none;
+      }
+    }
+  }
+}
