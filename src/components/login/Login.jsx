@@ -25,8 +25,9 @@ const Login = () => {
                 password: password,
             },
                 {
-                    withCredentials: true,
-                    httpOnly: true
+                    withCredentials: true, headers: {
+                        "Content-Type": "application/json",
+                    },
                 })
             if (res?.data?.user?.isAdmin) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: { user: res?.data?.user } })
