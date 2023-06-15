@@ -20,7 +20,7 @@ const Login = () => {
         dispatch({ type: "LOGIN_START" })
         try {
             const { email, password } = credentials
-            const res = await axios.post(`${import.meta.env.VITE_REACT_CLIENT_URL}auth/login`, {
+            const res = await axios.post(`${import.meta.env.VITE_REACT_CLIENT_URL}/auth/login`, {
                 email: email,
                 password: password,
             },
