@@ -39,7 +39,7 @@ const AddUser = () => {
             setUploadRequest(source);
             if (data !== null && data !== undefined && data !== '') {
                 const response = await axios.post(
-                    `${import.meta.env.VITE_CLOUDINARY_URL}`,
+                    `${import.meta.env.VITE_REACT_CLOUDINARY_URL}`,
                     data, {
                     cancelToken: source.token
                 }

@@ -26,7 +26,7 @@ const Header = () => {
                 <nav className="navigation">
                     <ul className="nav-links">
                         <li>
-                            <Link to="/admin-dashboard/dash-board">Dashboard</Link>
+                            <Link to="/admin-dashboard">Dashboard</Link>
                         </li>
                         <li>
                             <Link to="/hotels">Hotels</Link>
