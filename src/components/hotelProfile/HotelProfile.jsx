@@ -30,8 +30,12 @@ const HotelProfile = () => {
         setOpenGallery(false);
     };
     const navigate = useNavigate()
+    console.log(hotel)
     const handleHotelEdit = () => {
-        navigate('edithotel', { state: { hotel } })
+
+        return (
+            navigate('edithotel', { state: { hotel } })
+        )
 
     }
 

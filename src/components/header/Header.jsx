@@ -15,8 +15,7 @@ const Header = () => {
         await axios.get(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/auth/logout`, { withCredentials: true })
         localStorage.removeItem("currentUser")
 
-        window.location.reload()
-        navigate('/login', { replace: true })
+        navigate('/login')
     }
     return (
         <header className="header">
