@@ -170,6 +170,7 @@ const UserProfile = () => {
                     address: userData[5].value,
                     phone: userData[6].value,
                     profileimage: userData[0].value,
+                    id: id,
                 },
                 {
                     withCredentials: true,
