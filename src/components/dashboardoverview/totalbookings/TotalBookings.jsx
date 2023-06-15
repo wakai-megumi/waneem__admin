@@ -22,7 +22,7 @@ const TotalBookings = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REACT_CLIENT_URL}booking/all-bookings`);
+            const response = await axios.get(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/booking/all-bookings`);
             setBookings(response.data.bookings);
 
             setBookingCount(response.data.length);
@@ -63,7 +63,7 @@ const TotalBookings = () => {
         else status = 'Cancelled';
 
         try {
-            const response = await axios.patch(`${import.meta.env.VITE_REACT_CLIENT_URL}booking/update_booking_status`, { id, status, startDate, endDate }, {
+            const response = await axios.patch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/booking/update_booking_status`, { id, status, startDate, endDate }, {
                 withCredentials: true,
                 httpOnly: true,
             });
@@ -83,7 +83,7 @@ const TotalBookings = () => {
         if (status === 'Cancelled') {
 
             try {
-                const res = await axios.delete(`${import.meta.env.VITE_REACT_CLIENT_URL}booking/delete/`, {
+                const res = await axios.delete(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/booking/delete/`, {
 
                     headers: {
                         'data': JSON.stringify({

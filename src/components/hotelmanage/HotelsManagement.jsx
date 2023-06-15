@@ -7,7 +7,7 @@ import nodata from "../../assets/no-photo.png"
 
 const HotelsManagement = () => {
 
-    const { data, error, isPending, refetch } = useFetch(`${import.meta.env.VITE_REACT_CLIENT_URL}hotels/all`, {
+    const { data, error, isPending, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/all`, {
         withCredentials: true,
     })
     const noDataAlt = "No photo icons created by Those Icons - Flaticon --- www.freepik.com" // -- alt tag for the image if no image i`n the database 
@@ -17,7 +17,7 @@ const HotelsManagement = () => {
 
         try {
             console.log('here')
-            const response = await axios.delete(`${import.meta.env.VITE_REACT_CLIENT_URL}hotels/delete/${id}`, {
+            const response = await axios.delete(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/delete/${id}`, {
                 withCredentials: true,
             })
             console.log(response.data.success === true)

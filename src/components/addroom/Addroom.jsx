@@ -15,7 +15,7 @@ const Addroom = () => {
     const [loading, setLoading] = useState(false)
     const [hotelId, setHotelId] = useState('')
     const [roomNumbers, setRoomNumbers] = useState([])
-    const { data, error, isPending, refetch } = useFetch(`${import.meta.env.VITE_REACT_CLIENT_URL}hotels/all`, {
+    const { data, error, isPending, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/all`, {
         withCredentials: true,
     })
     console.log(data)
@@ -60,7 +60,7 @@ const Addroom = () => {
             try {
 
                 setLoading(true)
-                const response = await axios.post(`${import.meta.env.VITE_REACT_CLIENT_URL}room/${hotelId}`, formData, { withCredentials: true })
+                const response = await axios.post(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/${hotelId}`, formData, { withCredentials: true })
                 console.log(response)
                 alert("room added successfully")
                 setLoading(false)

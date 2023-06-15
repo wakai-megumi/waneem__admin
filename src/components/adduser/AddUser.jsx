@@ -70,7 +70,7 @@ const AddUser = () => {
         } else {
             try {
                 const response = await axios.post(
-                    `${import.meta.env.ClIENT_URL}auth/register`,
+                    `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/auth/register`,
                     formData,
                     { withCredentials: true }
                 );

@@ -23,7 +23,7 @@ const AddHotel = () => {
     const [Files, setFiles] = useState([])
     const [uploading, setuploading] = useState(false)
     const { data, isPending, error } = useFetch(
-        "http://localhost:3000/api/v1/room/all"
+        `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/all`
     )
     console.log(data)
     const distinctRooms = data && Object.values(

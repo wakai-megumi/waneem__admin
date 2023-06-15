@@ -31,7 +31,7 @@ const EditHotel = () => {
     const navigate = useNavigate()
 
     const { data, isPending, error } = useFetch(
-        "http://localhost:3000/api/v1/room/all"
+        `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/all`
     )
 
     useEffect(() => {
@@ -146,7 +146,7 @@ const EditHotel = () => {
 
         try {
             const response = await axios.patch(
-                `${import.meta.env.VITE_REACT_CLIENT_URL}hotels/updatehotel`,
+                `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/updatehotel`,
                 formDataWithAdminId,
                 {
                     withCredentials: true,

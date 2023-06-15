@@ -12,7 +12,7 @@ const Header = () => {
     const navigate = useNavigate()
 
     const handlelogout = async () => {
-        await axios.get(`${import.meta.env.VITE_REACT_CLIENT_URL}auth/logout`, { withCredentials: true })
+        await axios.get(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/auth/logout`, { withCredentials: true })
         localStorage.removeItem("currentUser")
 
         window.location.reload()

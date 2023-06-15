@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import noavatar from '../../assets/noavatar.jpg'
 const Users = () => {
     const [UserData, setUserData] = React.useState([])
-    const { data, error, loading, refetch } = useFetch(`${import.meta.env.VITE_REACT_CLIENT_URL}user/all`)
+    const { data, error, loading, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/all`)
     ///-make it more dynamic --  in future if  have time -- like have env variable for this
     const noavatarAlt = 'Image by pikisuperstar -- www.freepik.com'    //--constant for noavatar image alt
     useEffect(() => {
@@ -17,7 +17,7 @@ const Users = () => {
 
     const handleUserDelete = async (id) => {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_REACT_CLIENT_URL}user/delete/${id}`, {
+            const response = await axios.delete(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/delete/${id}`, {
                 withCredentials: true,
             })
             if (response?.data?.success === true) {

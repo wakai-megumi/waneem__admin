@@ -5,11 +5,11 @@ import "./RoomManagement.scss";
 import { useNavigate } from "react-router-dom";
 
 const RoomManagement = () => {
-    const { data, error, loading, refetch } = useFetch(`${import.meta.env.VITE_REACT_CLIENT_URL}room/all`)
+    const { data, error, loading, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/all`)
     console.log(data)
     const handleUserDelete = async (id) => {
         try {
-            const response = await axios.delete(`${import.meta.env.VITE_REACT_CLIENT_URL}room/delete/${id}`, {
+            const response = await axios.delete(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/delete/${id}`, {
                 withCredentials: true,
             })
             console.log(response.data)
