@@ -29,6 +29,7 @@ const Login = () => {
                         "Content-Type": "application/json",
                     },
                 })
+            console.log(res.headers, "in login setup");
             if (res?.data?.user?.isAdmin) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: { user: res?.data?.user } })
 
