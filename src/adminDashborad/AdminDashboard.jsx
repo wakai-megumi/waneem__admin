@@ -5,6 +5,8 @@ import Header from '../components/header/Header';
 import Content from '../components/content/Content';
 
 const AdminDashboard = () => {
+    console.log(`${import.meta.env.VITE_REACT_CLIENT_URL}auth/login`)
+    console.log(`${import.meta.env.VITE_REACT_CLIENT_URL} auth / login`)
     return (
         <div className="container">
             <Header />
