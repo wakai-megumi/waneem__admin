@@ -25,10 +25,18 @@ const Login = () => {
                 password: password,
             },
                 {
-                    withCredentials: true, headers: {
+                    withCredentials: true,
+                    headers: {
                         "Content-Type": "application/json",
                     },
                 })
+            const cookieValue = document.cookie
+                .split(';')
+                .map(cookie => cookie.trim())
+                .find(cookie => cookie.startsWith('access_token='))
+                ?.split('=')[1];
+
+            console.log(cookieValue, "in login way ");
             console.log(res.headers, "in login setup");
             if (res?.data?.user?.isAdmin) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: { user: res?.data?.user } })

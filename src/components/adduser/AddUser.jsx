@@ -15,7 +15,7 @@ const AddUser = () => {
         isAdmin: false,
     });
     const [loading, setLoading] = useState(false);
-
+    const [uploadRequest, setUploadRequest] = useState(null);
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const fieldValue = type === 'checkbox' ? checked : value;
@@ -34,23 +34,33 @@ const AddUser = () => {
 
         try {
             setLoading(true);
+            const cancelToken = axios.CancelToken;
+            const source = cancelToken.source();
+            setUploadRequest(source);
             if (data !== null && data !== undefined && data !== '') {
                 const response = await axios.post(
                     `${import.meta.env.VITE_CLOUDINARY_URL}`,
-                    data
+                    data, {
+                    cancelToken: source.token
+                }
                 );
 
-                console.log(response.data.url);
+                console.log(response);
                 setFormData((prevData) => ({
                     ...prevData,
                     profileimage: response.data.url,
                 }));
             }
         } catch (err) {
-            console.log(err);
+            if (axios.isCancel(err)) {
+                console.log('Image upload canceled:', err.message);
+            } else {
+                console.log(err);
+            }
         }
         setLoading(false);
-    };
+
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -79,6 +89,12 @@ const AddUser = () => {
             } catch (err) {
                 console.log(err);
             }
+        }
+    };
+    //image take too long so we can cancel the image upload
+    const cancelImageUpload = () => {
+        if (uploadRequest) {
+            uploadRequest.cancel('Image upload canceled by user');
         }
     };
 
@@ -186,6 +202,7 @@ const AddUser = () => {
                         onChange={handleImageUpload}
                     />
                 </div>
+                <button type="button" onClick={cancelImageUpload}>Cancel Upload</button>
             </div>
             <button type="submit" disabled={loading}>
                 Submit
