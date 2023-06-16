@@ -19,17 +19,24 @@ const BookingCard = ({ booking, handleStatus, handleRemoveBooking }) => {
         const dates = getDates(checkInDate, checkOutDate)
         handleRemoveBooking(_id, status, dates);
     };
-    const getDates = (checkInDate, checkOutDate) => {
-        let dates = []
-        const theDate = new Date(checkInDate)
-        const enddate = new Date(checkOutDate)
-        while (theDate < enddate) {
-            dates = [...dates, new Date(theDate)?.getTime()]
-            theDate.setDate(theDate?.getDate() + 1)
+    const getDates = (startDate, endDate) => {
+        let dates = [];
+        const theDate = new Date(startDate);
+
+        theDate.setHours(0, 0, 0, 0);
+
+        while (theDate <= endDate) {
+            dates = [...dates, new Date(theDate).getTime()];
+            theDate.setDate(theDate.getDate() + 1);
         }
-        dates = [...dates, enddate.getTime()]
-        return dates
-    }
+
+        const midnightEndDate = new Date(endDate);
+        midnightEndDate.setHours(0, 0, 0, 0);
+        dates = [...dates, midnightEndDate.getTime()];
+
+        return dates;
+    };
+
 
     return (
         <div className={`booking-card ${expanded ? 'expanded' : ''}`}>
