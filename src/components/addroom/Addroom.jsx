@@ -3,6 +3,7 @@ import './AddRoom.scss';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import useFetch from '../../customhooks/useFetch'
+import { useNavigate } from 'react-router-dom';
 const Addroom = () => {
     const [formData, setFormData] = useState({
         title: '',
@@ -10,6 +11,7 @@ const Addroom = () => {
         price: '',
         maxpeople: '',
         roomNumbers: [],
+        hotelId: ''
 
 
     });
@@ -19,6 +21,7 @@ const Addroom = () => {
     const { data, error, isPending, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/all`, {
         withCredentials: true,
     })
+    const navigate = useNavigate()
     console.log(data)
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,10 +29,10 @@ const Addroom = () => {
             ...prevData,
             [name]: value,
         }));
+        console.log(name, value)
     };
 
 
-    console.log(hotelId)
 
     const handleroomNumbersChange = (e) => {
         const { value } = e.target;
@@ -41,37 +44,46 @@ const Addroom = () => {
     }
     const handlesubmit = async (e) => {
         e.preventDefault();
-        setFormData((prevData) => ({
 
+        setFormData((prevData) => ({
             ...prevData,
-            roomNumbers: roomNumbers.map(num => {
-                const numb = parseInt(num)
-                return {
-                    number: numb
-                }
-            })
-        }))
+            roomNumbers: roomNumbers.map((num) => ({
+                number: parseInt(num),
+            })),
+        }));
+
+        formData.hotelId = hotelId;
         console.log(formData)
 
-
-        if (formData.title === "" || formData.desc === '' || formData.hotelId === '' || formData.price === '' || formData.maxpeople === '' || formData.roomNumbers.length === 0 || hotelId === '') {
-            toast.error("please fill all the fields")
-        }
-        else {
+        if (
+            formData.title === "" ||
+            formData.desc === "" ||
+            formData.hotelId === "" ||
+            formData.price === "" ||
+            formData.maxpeople === "" ||
+            formData.roomNumbers.length === 0
+        ) {
+            toast.error("Please fill all the fields");
+        } else {
             try {
+                setLoading(true);
+                await axios.post(
+                    `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/createRoom`,
+                    formData,
+                    { withCredentials: true }
+                );
+                setLoading(false);
 
-                setLoading(true)
-                const response = await axios.post(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/${hotelId}`, formData, { withCredentials: true })
-                console.log(response)
-                toast.success("room added successfully")
-                setLoading(false)
+                toast.success("Room added successfully");
+                navigate('/admin-dashboard/room')
             } catch (err) {
-                console.log(err)
-                setLoading(false)
+                console.log(err);
+                setLoading(false);
             }
         }
-
     };
+
+
 
 
     return (
@@ -100,7 +112,7 @@ const Addroom = () => {
                     />
                 </div>
                 <div className="input-section">
-                    <select htmlFor="hotel-id" className='selecthotelid' placeholder='choose below' onChange={(e) => { setHotelId(e.target.value) }}>
+                    <select id="hotelId" className='selecthotelid' placeholder='choose below' onChange={(e) => { setHotelId(e.target.value) }}>
                         <option>choose hotel</option>
                         {
                             data && data?.hotels.map(hotel => {

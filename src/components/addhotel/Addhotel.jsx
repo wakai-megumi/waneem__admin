@@ -3,7 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../utils/spinner/Spinner";
 import useFetch from "../../customhooks/useFetch";
+import { FaUpload } from "react-icons/fa";
 import "./Addhote.scss";
+import { toast } from "react-toastify";
 
 const AddHotel = () => {
     const [formData, setFormData] = useState({
@@ -24,6 +26,8 @@ const AddHotel = () => {
     });
     const [Files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
+    const [savinghotel, setSavingHotel] = useState(false);
+
     const [cancelToken, setCancelToken] = useState(null);
 
     const { data, isPending, error } = useFetch(
@@ -95,7 +99,8 @@ const AddHotel = () => {
             }));
         } catch (error) {
             if (axios.isCancel(error)) {
-                console.log("Image upload canceled");
+
+                toast.info("Image upload canceled");
             } else {
                 console.log(error);
                 setUploading(false);
@@ -105,7 +110,7 @@ const AddHotel = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (uploading) { return }
+        if (uploading) { return toast.info('please wait while uploading images , before submission') }
         setFormData((prevData) => ({
             ...prevData,
             adminId: user._id,
@@ -125,12 +130,12 @@ const AddHotel = () => {
 
         const isFormIncomplete = requiredFields.some((field) => !formData[field]);
         console.log(formData)
-        if (isFormIncomplete || formData.rooms.length === 0) {
-            alert("Please enter all required details");
-            return;
+        if (isFormIncomplete) {
+            return toast.error("Please enter all required details");
         }
 
         try {
+            setSavingHotel(true);
             console.log(import.meta.env.VITE_REACT_SERVER_URL)
             const response = await axios.post(
                 `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/new`,
@@ -141,12 +146,13 @@ const AddHotel = () => {
             );
 
             console.log(response);
-            alert("Hotel added successfully");
-            // window.location.reload();
-            navigate("/admin-dashboard/addhotel");
+            setSavingHotel(false);
+            toast.success("Hotel added successfully");
+            navigate("/admin-dashboard/hotels");
         } catch (err) {
-            alert(err.response?.data?.message || "An error occurred");
+            toast.error(err.response?.data?.message || "An error occurred");
             console.log(err);
+            setSavingHotel(false);
         }
     };
     //////////////////////////////////////////////////
@@ -263,7 +269,7 @@ const AddHotel = () => {
                         )}
                         <div className="upload-section">
                             <label htmlFor="logo-image-upload" className="upload-icon">
-                                <i className="fas fa-upload"></i>
+                                < FaUpload />
                             </label>
                             <input
                                 type="file"
@@ -296,7 +302,7 @@ const AddHotel = () => {
                         )}
                         <div className="upload-section">
                             <label htmlFor="hotel-image-upload" className="upload-icon">
-                                <i className="fas fa-upload"></i>
+                                < FaUpload />
                             </label>
                             <input
                                 type="file"
@@ -454,7 +460,7 @@ const AddHotel = () => {
                     </div>
                 </div>
             </div>
-            <button type="submit" className="submit-button" >
+            <button type="submit" className="submit-button" disabled={savinghotel} >
                 Add Hotel
             </button>
         </form>

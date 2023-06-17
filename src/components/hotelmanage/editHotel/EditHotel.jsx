@@ -5,6 +5,7 @@ import useFetch from "../../../customhooks/useFetch"
 import "./EditHotel.scss"
 import { FiUpload } from "react-icons/fi"
 import { toast } from 'react-toastify';
+import Spinner from "../../../utils/spinner/Spinner"
 
 const EditHotel = () => {
     const [formData, setFormData] = useState({
@@ -26,8 +27,10 @@ const EditHotel = () => {
 
     const location = useLocation()
     const { hotel } = location.state
-    console.log(hotel)
     const [uploading, setUploading] = useState(false)
+    const [Files, setFiles] = useState([])
+    const [savainghotel, setSavinghotel] = useState(false)
+
     const navigate = useNavigate()
 
     const { data, isPending, error } = useFetch(
@@ -58,7 +61,6 @@ const EditHotel = () => {
         return acc;
     }, {}));
 
-    const { user } = JSON.parse(localStorage.getItem("currentUser"))
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target
@@ -69,49 +71,91 @@ const EditHotel = () => {
             [name]: fieldValue,
         }))
     }
+    const resizeImage = (file, maxWidth, maxHeight) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
 
-    // const handleImageSelect = (e) => {                                --------------------------------------------- commented out
-    //     const files = e.target.files
-    //     setFiles(Array.from(files))
-    // }                                                                   -------------------------------------------commented out
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob(
+                    (blob) => {
+                        resolve(blob);
+                    },
+                    file.type,
+                    0.7
+                );
+            };
+
+            img.onerror = reject;
+
+            img.src = URL.createObjectURL(file);
+        });
+    };
+    const handleImageSelect = (e) => {                               // --------------------------------------------- commented out
+        const files = e.target.files
+        setFiles(Array.from(files))
+    }
+    console.log(formData)                                                   //  -------------------------------------------commented out
 
     const handleImageUpload = async (event) => {
         event.stopPropagation();
         event.preventDefault();
-        toast.error(" Editing the hotel images will be available soon")
-        // if (Files.length === 0) {                                             -------------------------------------------commented out
-        //     alert("Please select images")
-        //     return
-        // }
+        if (Files.length === 0) {                                             //------//-------------------------------------commented out
+            return toast.error("Please select images")
 
-        // setUploading(true)
+        }
 
-        // try {
-        //     const list = await Promise.all(
-        //         Files.map(async (file) => {
-        //             const formData = new FormData()
-        //             formData.append("file", file, file.name)
-        //             formData.append("upload_preset", "upload_hotel_booking")
+        setUploading(true)
 
-        //             const response = await axios.post(
-        //                 "https://api.cloudinary.com/v1_1/wakai-megumi/image/upload",
-        //                 formData
-        //             )
+        try {
+            const list = await Promise.all(
+                Files.map(async (file) => {
+                    const resizedBlob = await resizeImage(file, 800, 600);
 
-        //             const url = response.data.url
-        //             return url
-        //         })
-        //     )
+                    const formData = new FormData()
+                    formData.append("file", resizedBlob, file.name)
+                    formData.append("upload_preset", "upload_hotel_booking")
 
-        //     setFormData((prevData) => ({
-        //         ...prevData,
-        //         photos: list,
-        //     }))
-        // } catch (err) {
-        //     console.log(err)
-        // }
+                    const response = await axios.post(
+                        "https://api.cloudinary.com/v1_1/wakai-megumi/image/upload",
+                        formData
+                    )
 
-        // setUploading(false)                                                    -------------------------------------------commented out
+                    const url = response.data.url
+                    return url
+                })
+            )
+
+            setFormData((prevData) => ({
+                ...prevData,
+                photos: list,
+            }))
+        } catch (err) {
+            console.log(err)
+        }
+
+        setUploading(false)                                          //------------------------------------------- commented out
     }
 
     console.log(hotel._id)
@@ -132,18 +176,20 @@ const EditHotel = () => {
 
         const hasEmptyFields = requiredFields.some((field) => !formData[field])
 
-        if (hasEmptyFields || formData.rooms.length === 0) {
-            alert("Please enter all required details")
-            return
+        if (hasEmptyFields) {
+            return toast.error("Please enter all required details")
+
         }
 
         const formDataWithAdminId = {
             ...formData,
             _id: hotel._id,
         }
+        console.log(formDataWithAdminId)
 
 
         try {
+            setSavinghotel(true)
             const response = await axios.patch(
                 `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/updatehotel`,
                 formDataWithAdminId,
@@ -151,28 +197,31 @@ const EditHotel = () => {
                     withCredentials: true,
                 }
             )
-
+            setSavinghotel(false)
             toast.success(response?.data?.updatedHotel?.name + " has been updated")
             // Use navigate to navigate to a specific route after successful submission
             navigate("/admin-dashboard/hotels")
         } catch (err) {
-            alert(err.response.data.message, "this")
+            setSavinghotel(false)
+            toast.error(err.response.data.message)
             console.log(err)
         }
     }
 
     const handleLogoUpload = async (e) => {
         const file = e.target.files[0]
+        console.log(file)
+        const resizedBlob = await resizeImage(file, 800, 600);
 
         const formData = new FormData()
-        formData.append("file", file, file.name)
+        formData.append("file", resizedBlob, file.name)
         formData.append("upload_preset", "upload_hotel_booking")
 
         try {
             setUploading(true)
 
             const response = await axios.post(
-                `${import.meta.env.VITE_CLOUDINARY_URL}`,
+                "https://api.cloudinary.com/v1_1/wakai-megumi/image/upload",
                 formData
             )
 
@@ -195,16 +244,17 @@ const EditHotel = () => {
             e.target.selectedOptions,
             (option) => option.value
         )
-
+        const distinctOptions = [...new Set(selectedOptions)];
         setFormData((prevData) => ({
             ...prevData,
-            rooms: [...selectedOptions],
+            rooms: [...distinctOptions],
         }))
+        console.log(formData)
     }
 
     return (
         <form onSubmit={handleSubmit} className="form">
-            {uploading && <div>Loading, please wait...</div>}
+            {uploading && <div>Loading, please wait... , can edit other details in the while</div>}
             <div className="add-hotel-container">
                 <div className="column">
                     <div className="logo-section">
@@ -217,7 +267,10 @@ const EditHotel = () => {
                                 />
                             </div>
                         ) : (
-                            <div className="placeholder">Hotel logo Placeholder</div>
+                            <div className="placeholder">
+                                {uploading ? <Spinner /> : "Hotel Images here"}
+
+                            </div>
                         )}
                         <div className="upload-section">
                             <label htmlFor="logo-image-upload" className="upload-icon">
@@ -228,7 +281,7 @@ const EditHotel = () => {
                                 id="logo-image-upload"
                                 accept="image/*"
                                 onChange={handleLogoUpload}
-                                disabled={true}
+                                disabled={uploading}
                             />
                         </div>
                     </div>
@@ -243,22 +296,25 @@ const EditHotel = () => {
                                 />
                             </div>
                         ) : (
-                            <div className="placeholder">Hotel images</div>
+                            <div className="placeholder"> {
+                                uploading ? <Spinner /> : "Hotel Images here"
+                            }</div>
                         )}
                         <div className="upload-section">
-                            <label htmlFor="hotel-image-upload" className="upload-icon" onClick={() => toast.succe}>
+                            <label htmlFor="hotel-image-upload" className="upload-icon" >
                                 <FiUpload />
                             </label>
-                            {/* <input
+                            <input
                                 type="file"
                                 id="hotel-image-upload"
                                 accept="image/*"
                                 multiple
                                 onChange={handleImageSelect}
                                 disabled={uploading}
-                            /> */}
+                            />
                             <button
                                 onClick={handleImageUpload}
+                                disabled={uploading}
                                 style={
                                     uploading ? { cursor: "not-allowed" } : { cursor: "pointer" }
                                 }
@@ -401,7 +457,7 @@ const EditHotel = () => {
                     </div>
                 </div>
             </div>
-            <button type="submit" className="btn">
+            <button type="submit" className="btn" disabled={savainghotel}>
                 Submit
             </button>
         </form>

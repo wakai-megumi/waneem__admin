@@ -1,12 +1,9 @@
-// Profile.scss
-
 .user {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  // margin-top: 60px; // Adjustments for navbar
 
   .wrapper {
     width: 50%;
@@ -49,9 +46,8 @@
   }
 }
 
-// Adjustments for small screens
 @media only screen and (max-width: 768px) {
   .user-profile {
-    margin-top: 80px; // Adjust according to your navbar height
+    margin-top: 80px;
   }
 }

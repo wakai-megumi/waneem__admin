@@ -3,45 +3,50 @@ import useFetch from "../../customhooks/useFetch";
 import axios from "axios";
 import "./Hotelmanagement.scss";
 import { useNavigate } from "react-router-dom";
-import nodata from "../../assets/no-photo.png"
+import nodata from "../../assets/no-photo.png";
 
 const HotelsManagement = () => {
+    const { data, error, isPending, refetch } = useFetch(
+        `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/all`,
+        {
+            withCredentials: true,
+        }
+    );
 
-    const { data, error, isPending, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/all`, {
-        withCredentials: true,
-    })
-    const noDataAlt = "No photo icons created by Those Icons - Flaticon --- www.freepik.com" // -- alt tag for the image if no image i`n the database 
+    const noDataAlt =
+        "No photo icons created by Those Icons - Flaticon --- www.freepik.com"; // -- alt tag for the image if no image is in the database
 
-    console.log(data)
     const handleHotelDelete = async (id) => {
-
         try {
-            console.log('here')
-            const response = await axios.delete(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/delete/${id}`, {
-                withCredentials: true,
-            })
-            console.log(response.data.success === true)
+            const response = await axios.delete(
+                `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/hotels/delete/${id}`,
+                {
+                    withCredentials: true,
+                }
+            );
             if (response?.data?.success === true) {
-                refetch()
+                refetch();
             }
         } catch (err) {
-            console.log(err)
+            console.log(err);
         }
+    };
 
-    }
-    const navigate = useNavigate()
-    const handlenewhotel = async () => {
-        navigate('/admin-dashboard/addhotel')
-    }
-    console.log(error)
+    const navigate = useNavigate();
+
+    const handleNewHotel = () => {
+        navigate("/admin-dashboard/addhotel");
+    };
 
     return (
         <div className="hotels-container">
-            <div className='hotels-heading'>
+            <div className="hotels-heading">
                 <h2>HOTELS</h2>
-                <button className="add-new-button" onClick={handlenewhotel}>Add New</button>
+                <button className="add-new-button" onClick={handleNewHotel}>
+                    Add New
+                </button>
             </div>
-            <table className='hotel-details'>
+            <table className="hotel-details">
                 <thead>
                     <tr>
                         <th>HOTEL_ID</th>
@@ -53,36 +58,89 @@ const HotelsManagement = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {isPending ? (
-                        <tr>
-                            <td colSpan="7">Loading...</td>
-                        </tr>
+                    {isPending || data?.hotels?.length === 0 ? (
+                        // Skeleton loading effect for hotels
+                        <>
+
+
+                            <tr>
+                                {
+                                    data?.hotels?.length === 0 && <h1>No hotels in the database</h1>
+                                }
+                                <td colSpan="6">
+                                    <div className="skeleton-container">
+                                        <div className="skeleton-row">
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                        </div>
+                                        <div className="skeleton-row">
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                        </div>
+                                        <div className="skeleton-row">
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                            <div className="skeleton-item"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </>
                     ) : error ? (
                         <tr>
-                            <td colSpan="7">Error</td>
+                            <td colSpan="6">{error?.response?.data?.message}please refresh the page</td>
                         </tr>
                     ) : (
-                        data && data?.hotels?.map(hotel => (
-
-                            <tr className='hotel-row ' key={hotel._id}>
+                        data?.hotels?.map((hotel) => (
+                            <tr className="hotel-row" key={hotel._id}>
                                 <td>{hotel._id}</td>
-                                <td className='image'>
+                                <td className="image">
                                     {hotel.hotelLogo ? (
-                                        <img src={hotel.hotelLogo} alt="Hotel" className="hotel-image" />
+                                        <img
+                                            src={hotel.hotelLogo}
+                                            alt="Hotel"
+                                            className="hotel-image"
+                                        />
                                     ) : (
-                                        <img src={nodata} alt={noDataAlt} className="hotel-image" />
+                                        <img
+                                            src={nodata}
+                                            alt={noDataAlt}
+                                            className="hotel-image"
+                                        />
                                     )}
-                                    <p> {hotel.name}</p>
-
+                                    <p>{hotel.name}</p>
                                 </td>
                                 <td>{hotel.type}</td>
                                 <td>{hotel.title}</td>
                                 <td>{hotel.city}</td>
                                 <td className="btns">
-                                    {/* sending the whole hotel data , saving our api req, only when we edit something then only need to have api call */}
-                                    <button className="view-button" onClick={() => navigate('/admin-dashboard/hotel_profile', { state: { hotel } })}>View</button>
-
-                                    <button className="delete-button" onClick={() => handleHotelDelete(hotel._id)}>Delete</button>
+                                    <button
+                                        className="view-button"
+                                        onClick={() =>
+                                            navigate("/admin-dashboard/hotel_profile", {
+                                                state: { hotel },
+                                            })
+                                        }
+                                    >
+                                        View
+                                    </button>
+                                    <button
+                                        className="delete-button"
+                                        onClick={() => handleHotelDelete(hotel._id)}
+                                    >
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         ))
@@ -92,6 +150,5 @@ const HotelsManagement = () => {
         </div>
     );
 };
-
 
 export default HotelsManagement;

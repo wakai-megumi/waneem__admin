@@ -1,5 +1,3 @@
-// EditHotel.scss
-
 .form {
   display: flex;
   flex-direction: column;
@@ -17,7 +15,7 @@
     .column {
       display: flex;
       flex-direction: column;
-      width: 70%;
+      width: 100%; /* Adjusted to occupy full width of the container */
 
       .logo-section,
       .hotel-photos {
@@ -26,8 +24,8 @@
         align-items: center;
 
         .image {
-          width: 150px;
-          height: 150px;
+          width: 100%;
+          height: 200px; /* Increased height for better visibility */
           overflow: hidden;
           border-radius: 0.25rem;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -40,8 +38,8 @@
         }
 
         .placeholder {
-          width: 150px;
-          height: 150px;
+          width: 100%;
+          height: 200px; /* Increased height for better visibility */
           display: flex;
           align-items: center;
           justify-content: center;
@@ -54,7 +52,7 @@
         .upload-section {
           display: flex;
           align-items: center;
-          gap: 1rem;
+          justify-content: center; /* Centered the upload button */
 
           .upload-icon {
             background-color: #ddd;
@@ -97,6 +95,7 @@
           margin-top: 0.5rem;
           font-size: 0.875rem;
           color: #666;
+          text-align: center; /* Centered the text */
         }
       }
 
@@ -143,6 +142,11 @@
 
     &:hover {
       background-color: #0056b3;
+    }
+
+    &:disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
     }
   }
 }

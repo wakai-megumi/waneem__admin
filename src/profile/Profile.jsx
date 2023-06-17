@@ -14,7 +14,7 @@ const UserProfile = () => {
     const [loadingImage, setLoadingImage] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState(false)
 
-    const noavatarAlt = "Image by pikisuperstar -- www.freepik.com"/////---------------noavatar alt
+    const noavatarAlt = "Image by pikisuperstar -- www.freepik.com" /////---------------noavatar alt
 
     /////all the id used in this page --
     const id = currentUser._id
@@ -254,22 +254,16 @@ const UserProfile = () => {
                                                     <td className="info-value">
                                                         {user.value !== "" ? (
                                                             <>
-                                                                {
-                                                                    loadingImage ? (
-                                                                        <Spinner />
-                                                                    )
-                                                                        :
-                                                                        <img
-                                                                            src={user.value}
-                                                                            alt="Profile"
-                                                                            className="profile-image"
-                                                                        />
-                                                                }
-
-
-
+                                                                {loadingImage ? (
+                                                                    <Spinner />
+                                                                ) : (
+                                                                    <img
+                                                                        src={user.value}
+                                                                        alt="Profile"
+                                                                        className="profile-image"
+                                                                    />
+                                                                )}
                                                             </>
-
                                                         ) : (
                                                             <img
                                                                 src={noavatar}
@@ -300,9 +294,12 @@ const UserProfile = () => {
                     <button
                         className="button"
                         style={{
-                            fontSize: "1rem", border: 'none',
-                            outline: 'none', padding: '5px', backgroundColor: 'green',
-                            color: 'white'
+                            fontSize: "1rem",
+                            border: "none",
+                            outline: "none",
+                            padding: "5px",
+                            backgroundColor: "green",
+                            color: "white",
                         }}
                         disabled={updateSuccess || loadingImage}
                         onClick={handleSaveAll}
