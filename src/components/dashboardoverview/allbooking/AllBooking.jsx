@@ -28,7 +28,7 @@ const TotalBookings = () => {
 
         } catch (error) {
             console.error('Error fetching booking count:', error);
-            setError(error.response.data.message)
+            setError(error?.response?.data?.message)
         }
     };
 
@@ -98,7 +98,7 @@ const TotalBookings = () => {
                 {!showAllBookings ? 'Show All Bookings' : 'Hide Bookings'}
             </button>
             {
-                error && <span className="error-message">{error}</span> || message && <span className="error-message">{message}</span>
+                error && <span className="error-message">{error?.response?.data?.message}</span> || message && <span className="error-message">{message}</span>
             }
             {showAllBookings && (
                 <div className="booking-gallery">
