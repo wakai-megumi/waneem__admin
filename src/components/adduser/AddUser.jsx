@@ -28,11 +28,53 @@ const AddUser = () => {
             [name]: fieldValue,
         }));
     };
+    const resizeImage = (file, maxWidth, maxHeight) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
 
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob(
+                    (blob) => {
+                        resolve(blob);
+                    },
+                    file.type,
+                    0.7
+                );
+            };
+
+            img.onerror = reject;
+
+            img.src = URL.createObjectURL(file);
+        });
+    };
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
+        const resizedBlob = await resizeImage(file, 800, 600);
+
         const data = new FormData();
-        data.append('file', file);
+        data.append('file', resizedBlob);
         data.append('upload_preset', 'upload_hotel_booking');
 
         try {
