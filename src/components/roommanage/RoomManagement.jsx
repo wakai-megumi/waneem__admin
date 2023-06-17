@@ -3,23 +3,25 @@ import useFetch from "../../customhooks/useFetch";
 import axios from "axios";
 import "./RoomManagement.scss";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RoomManagement = () => {
     const { data, error, loading, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/all`)
     console.log(data)
     const handleUserDelete = async (id) => {
-        try {
-            const response = await axios.delete(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/delete/${id}`, {
-                withCredentials: true,
-            })
-            console.log(response.data)
-            console.log(response.data.success === true)
-            if (response?.data?.success === true) {
-                refetch()
-            }
-        } catch (err) {
-            console.log(err)
-        }
+        // try {
+        //     const response = await axios.delete(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/delete/${id}`, {
+        //         withCredentials: true,
+        //     })
+        //     console.log(response.data)
+        //     console.log(response.data.success === true)
+        //     if (response?.data?.success === true) {
+        //         refetch()
+        //     }
+        // } catch (err) {
+        //     console.log(err)
+        // }
+        toast.info("operation on  room is not allowed currenty , will be enrolled soon")
 
 
     }
@@ -77,7 +79,7 @@ const RoomManagement = () => {
                                 }</td>
 
                                 <td>
-                                    <button className="view-button">View</button>
+                                    <button className="view-button" onClick={() => handleUserDelete(room._id)}>View</button>
                                     <button className="delete-button" onClick={() => handleUserDelete(room._id)}>Delete</button>
                                 </td>
                             </tr>

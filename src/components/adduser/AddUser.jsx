@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FiUpload } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import Spinner from '../../utils/spinner/Spinner';
 
 const AddUser = () => {
     const [formData, setFormData] = useState({
@@ -39,6 +40,7 @@ const AddUser = () => {
             const cancelToken = axios.CancelToken;
             const source = cancelToken.source();
             setUploadRequest(source);
+            toast.info("may take a while please wait while it upload")
             if (data !== null && data !== undefined && data !== '') {
                 const response = await axios.post(
                     `${import.meta.env.VITE_REACT_CLOUDINARY_URL}`,
@@ -48,10 +50,12 @@ const AddUser = () => {
                 );
 
                 console.log(response);
-                setFormData((prevData) => ({
-                    ...prevData,
-                    profileimage: response.data.url,
-                }));
+                if (response?.data?.url) {
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        profileimage: response.data.url,
+                    }));
+                }
             }
         } catch (err) {
             if (axios.isCancel(err)) {
@@ -68,9 +72,9 @@ const AddUser = () => {
         e.preventDefault();
         console.log(formData);
         if (
-            formData.profileimage === '' ||
-            formData.profileimage === undefined ||
-            formData.profileimage === null ||
+            // formData.profileimage === '' ||
+            // formData.profileimage === undefined ||                   // can set profile image lates also
+            // formData.profileimage === null ||
             formData.username === '' ||
             formData.phone === '' ||
             formData.address === '' ||
@@ -194,7 +198,12 @@ const AddUser = () => {
                 {formData.profileimage ? (
                     <img src={formData.profileimage} alt="Uploaded" className="user-image" />
                 ) : (
-                    <div className="placeholder">Image Placeholder</div>
+                    <div className="placeholder">{
+                        loading ? <Spinner /> : "Image Placeholder"
+                    }
+
+
+                    </div>
                 )}
                 <div className="upload-section">
                     <label htmlFor="image-upload" className="upload-icon">
@@ -205,6 +214,7 @@ const AddUser = () => {
                         id="image-upload"
                         accept="image/*"
                         onChange={handleImageUpload}
+                        disabled={loading}
                     />
                 </div>
                 <button type="button" onClick={cancelImageUpload}>Cancel Upload</button>

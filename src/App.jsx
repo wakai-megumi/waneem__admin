@@ -1,5 +1,5 @@
 import React, { Profiler, useContext } from 'react';
-import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Navigate, Routes, useNavigationType, useNavigate } from 'react-router-dom';
 import { Authcontext } from './context/Authcontext.jsx';
 import Login from '../src/components/login/Login';
 import AdminDashboard from '../src/adminDashborad/AdminDashboard';
@@ -15,14 +15,30 @@ import UserProfile from './profile/Profile.jsx';
 import { ToastContainer } from 'react-toastify';
 import HotelProfile from './components/hotelProfile/HotelProfile.jsx';
 import EditHotel from './components/hotelmanage/editHotel/EditHotel.jsx';
-
+import { BsArrowLeft } from 'react-icons/bs'
+import "./App.scss"
 
 
 const App = () => {
   const { currentUser } = useContext(Authcontext);
   const isadmin = currentUser && currentUser.isAdmin;
   console.log(currentUser, currentUser?.isAdmin)
+  const BackButton = () => {
+    const navigate = useNavigate();
 
+    const goBack = () => {
+      navigate(-1);
+    };
+
+    return (
+      <div className="back-button-container">
+        <button className="back-button" onClick={goBack}>
+          <BsArrowLeft />
+
+        </button>
+      </div>
+    );
+  };
   return (
     <Router>
       <Routes>
@@ -53,6 +69,7 @@ const App = () => {
           <Route path="/" element={<Login />} />
         )}
       </Routes>
+      <BackButton />
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </Router>
   );

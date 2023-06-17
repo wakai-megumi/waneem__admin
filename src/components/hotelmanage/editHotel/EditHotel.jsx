@@ -53,7 +53,6 @@ const EditHotel = () => {
         }))
     }, [hotel])
 
-
     const distinctRooms = data && Object.values(data?.rooms?.reduce((acc, room) => {
         acc[room.title] = room;
         return acc;

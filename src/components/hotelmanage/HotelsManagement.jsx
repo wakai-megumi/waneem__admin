@@ -38,7 +38,7 @@ const HotelsManagement = () => {
     return (
         <div className="hotels-container">
             <div className='hotels-heading'>
-                <h2>Add New Hotel</h2>
+                <h2>HOTELS</h2>
                 <button className="add-new-button" onClick={handlenewhotel}>Add New</button>
             </div>
             <table className='hotel-details'>
@@ -64,7 +64,7 @@ const HotelsManagement = () => {
                     ) : (
                         data && data?.hotels?.map(hotel => (
 
-                            <tr className='hoetl-row ' key={hotel._id}>
+                            <tr className='hotel-row ' key={hotel._id}>
                                 <td>{hotel._id}</td>
                                 <td className='image'>
                                     {hotel.hotelLogo ? (

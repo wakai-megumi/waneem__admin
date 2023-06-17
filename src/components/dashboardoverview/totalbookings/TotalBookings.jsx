@@ -23,10 +23,18 @@ const TotalBookings = () => {
     const fetchBookings = async () => {
         try {
             const response = await axios.get(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/booking/all-bookings`);
-            setBookings(response.data.bookings);
 
-            setBookingCount(response.data.length);
-            console.log(response.data.bookings);
+            if (response.data.success && response?.data?.bookings?.length > 0) {
+                setBookingCount(response.data.length);
+                setBookings(response.data.bookings);
+
+            }
+            else {
+                setBookingCount(response.data.length);
+
+            }
+
+            console.log(response?.data?.bookings);
 
 
         } catch (error) {
@@ -36,7 +44,7 @@ const TotalBookings = () => {
 
     const getLatestBookings = () => {
 
-        const data = bookings.slice(0, 3);
+        const data = bookings?.slice(0, 3);
         setLatestBookings(data);
     };
 
@@ -127,8 +135,8 @@ const TotalBookings = () => {
 
             <div className="latest-bookings">
                 <h3>Latest Bookings</h3>
-                {latestBookings.map((booking) => (
-                    <div className="booking-card" key={booking._id}>
+                {latestBookings?.map((booking) => (
+                    <div className="booking-card" key={booking?._id}>
                         {booking?.hotelname && <p>Hotel: {booking.hotelname}</p>}
 
                         <p>Booking ID: {booking._id}</p>

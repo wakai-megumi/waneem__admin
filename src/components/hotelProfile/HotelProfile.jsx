@@ -81,9 +81,8 @@ const HotelProfile = () => {
                                 <Skeleton width={300} />
                             ) : (
                                 <>
-                                    Book a stay over{" "}
-                                    <span className="price">{hotel.cheapestprice} Rs</span> and
-                                    get a free <span className="features">airport taxi</span>
+                                    Cheapest Price :
+                                    <span className="price"> {hotel.cheapestprice} Rs</span>
                                 </>
                             )}
                         </h3>

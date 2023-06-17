@@ -7,8 +7,8 @@ import { toast } from 'react-toastify';
 const TotalBookings = () => {
     const [bookings, setBookings] = useState([]);
     const [showAllBookings, setShowAllBookings] = useState(false);
-    const [bookingGallery, setBookingGallery] = useState([]);
-
+    const [error, setError] = useState('')
+    const [message, setMessage] = useState('')
     useEffect(() => {
         fetchBookings();
     }, []);
@@ -16,13 +16,19 @@ const TotalBookings = () => {
 
     const fetchBookings = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/booking/all-bookings`);
-            setBookings(response.data.bookings);
+            const resp = await axios.get(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/booking/all-bookings`);
+            if (resp.data.success && resp?.data?.bookings?.length > 0) {
+                setBookings(resp.data?.bookings);
 
+            }
+            else {
+                setMessage('No Bookings Found')
+            }
 
 
         } catch (error) {
             console.error('Error fetching booking count:', error);
+            setError(error.response.data.message)
         }
     };
 
@@ -50,7 +56,8 @@ const TotalBookings = () => {
             setBookings(newData);
         }
         catch (error) {
-            console.error('Error updating booking status:', error);
+            console.log(error)
+            setError(error.response.data.message)
 
         }
 
@@ -90,7 +97,9 @@ const TotalBookings = () => {
             <button className="toggle-button" onClick={handleToggleAllBookings}>
                 {!showAllBookings ? 'Show All Bookings' : 'Hide Bookings'}
             </button>
-
+            {
+                error && <span className="error-message">{error}</span> || message && <span className="error-message">{message}</span>
+            }
             {showAllBookings && (
                 <div className="booking-gallery">
                     <h3>All Bookings</h3>

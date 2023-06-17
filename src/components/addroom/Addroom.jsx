@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './AddRoom.scss';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import useFetch from '../../customhooks/useFetch'
 const Addroom = () => {
     const [formData, setFormData] = useState({
@@ -53,8 +54,8 @@ const Addroom = () => {
         console.log(formData)
 
 
-        if (formData.title === "" || formData.desc === '' || formData.price === '' || formData.maxpeople === '' || formData.roomNumbers.length === 0 || hotelId === '') {
-            alert("Please upload all details")
+        if (formData.title === "" || formData.desc === '' || formData.hotelId === '' || formData.price === '' || formData.maxpeople === '' || formData.roomNumbers.length === 0 || hotelId === '') {
+            toast.error("please fill all the fields")
         }
         else {
             try {
@@ -62,7 +63,7 @@ const Addroom = () => {
                 setLoading(true)
                 const response = await axios.post(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/room/${hotelId}`, formData, { withCredentials: true })
                 console.log(response)
-                alert("room added successfully")
+                toast.success("room added successfully")
                 setLoading(false)
             } catch (err) {
                 console.log(err)

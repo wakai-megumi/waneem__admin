@@ -1,17 +1,17 @@
 import React, { useContext, useState, useEffect } from "react"
 import { Authcontext } from "../context/Authcontext.jsx"
 import axios from "axios"
-import { ToastContainer, toast } from "react-toastify"
+import { ToastContainer, collapseToast, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import noavatar from "../assets/noavatar.jpg"
-
+import Spinner from "../utils/spinner/Spinner.jsx"
 import "./Profile.scss"
 import { useLocation } from "react-router-dom"
 
 const UserProfile = () => {
     const { currentUser } = useContext(Authcontext)
     const [loading, setLoading] = useState(true)
-    const [loadingImage, setLoadingImage] = useState(true)
+    const [loadingImage, setLoadingImage] = useState(false)
     const [updateSuccess, setUpdateSuccess] = useState(false)
 
     const noavatarAlt = "Image by pikisuperstar -- www.freepik.com"/////---------------noavatar alt
@@ -20,7 +20,7 @@ const UserProfile = () => {
     const id = currentUser._id
     const location = useLocation()
     const user = location.state?.user
-    console.log(user)
+    const userid = user?._id
     ///////////////////////////
 
     const [userData, setUserData] = useState([
@@ -79,7 +79,7 @@ const UserProfile = () => {
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/get/${user._id}`,
+                    `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/get/${userid}`,
                     { withCredentials: true }
                 )
                 setUserData((prevData) =>
@@ -161,7 +161,7 @@ const UserProfile = () => {
         try {
             setUpdateSuccess(true)
             const response = await axios.put(
-                `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/update/${id}`,
+                `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/update/${userid}`,
                 {
                     username: userData[1].value,
                     email: userData[2].value,
@@ -170,7 +170,7 @@ const UserProfile = () => {
                     address: userData[5].value,
                     phone: userData[6].value,
                     profileimage: userData[0].value,
-                    id: id,
+                    id: userid,
                 },
                 {
                     withCredentials: true,
@@ -201,12 +201,10 @@ const UserProfile = () => {
             console.log(error)
         }
     }
-    console.log(currentUser._id)
-    console.log(updateSuccess)
     return (
         <div className="user">
             {loading ? (
-                <div className="loading">Loading...</div>
+                <Spinner />
             ) : (
                 <>
                     <div className="wrapper">
@@ -255,11 +253,23 @@ const UserProfile = () => {
                                                 {user.type === "file" ? (
                                                     <td className="info-value">
                                                         {user.value !== "" ? (
-                                                            <img
-                                                                src={user.value}
-                                                                alt="Profile"
-                                                                className="profile-image"
-                                                            />
+                                                            <>
+                                                                {
+                                                                    loadingImage ? (
+                                                                        <Spinner />
+                                                                    )
+                                                                        :
+                                                                        <img
+                                                                            src={user.value}
+                                                                            alt="Profile"
+                                                                            className="profile-image"
+                                                                        />
+                                                                }
+
+
+
+                                                            </>
+
                                                         ) : (
                                                             <img
                                                                 src={noavatar}
@@ -289,7 +299,12 @@ const UserProfile = () => {
                     </div>
                     <button
                         className="button"
-                        disabled={updateSuccess}
+                        style={{
+                            fontSize: "1rem", border: 'none',
+                            outline: 'none', padding: '5px', backgroundColor: 'green',
+                            color: 'white'
+                        }}
+                        disabled={updateSuccess || loadingImage}
                         onClick={handleSaveAll}
                     >
                         Save

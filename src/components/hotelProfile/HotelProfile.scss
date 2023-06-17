@@ -23,6 +23,7 @@
         gap: 2rem;
         margin-top: 20px;
         margin-bottom: 20px;
+
         > button {
           padding: 10px 20px;
           font-size: 16px;
@@ -35,6 +36,7 @@
           margin-right: 3rem;
         }
       }
+
       .hotel_info {
         display: flex;
         align-items: center;
@@ -112,7 +114,6 @@
         img {
           width: 100%;
           height: 100%;
-
           object-fit: cover;
           transition: all 0.3s ease-in-out;
 
@@ -212,32 +213,48 @@
       position: relative;
       width: 80%;
       height: 80%;
-    }
 
-    .gallery_image_full {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
+      .gallery_image_full {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
 
-    .previous_image,
-    .next_image {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 40px;
-      color: #ffffff;
-      cursor: pointer;
-      opacity: 0.8;
-      transition: opacity 0.6s ease-in-out;
+      .previous_image,
+      .next_image {
+        position: absolute;
+        top: 50%;
+        font-size: 48px;
+        color: #ffffff;
+        cursor: pointer;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        border-radius: 50%;
+      }
 
-      &:hover {
-        opacity: 1;
+      .previous_image {
+        left: 20px;
+      }
+
+      .next_image {
+        right: 20px;
       }
     }
 
-    .next_image {
-      right: 10px;
+    .no_photos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 200px;
+      background-color: #f5f5f5; /* Update with your desired color */
+      border-radius: 5px;
+      margin-top: 20px;
+      padding: 20px;
+
+      p {
+        margin: 0;
+      }
     }
   }
 }
