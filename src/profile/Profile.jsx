@@ -1,26 +1,28 @@
-import React, { useContext, useState, useEffect } from "react"
-import { Authcontext } from "../context/Authcontext.jsx"
-import axios from "axios"
-import { ToastContainer, collapseToast, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import noavatar from "../assets/noavatar.jpg"
-import Spinner from "../utils/spinner/Spinner.jsx"
-import "./Profile.scss"
-import { useLocation } from "react-router-dom"
+import React, { useContext, useState, useEffect } from "react";
+import { Authcontext } from "../context/Authcontext.jsx";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import noavatar from "../assets/noavatar.jpg";
+import Spinner from "../utils/spinner/Spinner.jsx";
+import "./Profile.scss";
+import { FaEdit } from 'react-icons/fa';
+
+import { useLocation, useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-    const { currentUser } = useContext(Authcontext)
-    const [loading, setLoading] = useState(true)
-    const [loadingImage, setLoadingImage] = useState(false)
-    const [updateSuccess, setUpdateSuccess] = useState(false)
+    const { currentUser } = useContext(Authcontext);
+    const [loading, setLoading] = useState(true);
+    const [loadingImage, setLoadingImage] = useState(false);
+    const [updateSuccess, setUpdateSuccess] = useState(false);
 
-    const noavatarAlt = "Image by pikisuperstar -- www.freepik.com" /////---------------noavatar alt
+    const noavatarAlt = "Image by pikisuperstar -- www.freepik.com"; /////---------------noavatar alt
 
     /////all the id used in this page --
-    const id = currentUser._id
-    const location = useLocation()
-    const user = location.state?.user
-    const userid = user?._id
+    const id = currentUser._id;
+    const location = useLocation();
+    const user = location.state?.user;
+    const userid = user?._id;
     ///////////////////////////
 
     const [userData, setUserData] = useState([
@@ -73,7 +75,7 @@ const UserProfile = () => {
             type: "text",
             id: "phone",
         },
-    ])
+    ]);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -81,85 +83,86 @@ const UserProfile = () => {
                 const response = await axios.get(
                     `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/get/${userid}`,
                     { withCredentials: true }
-                )
+                );
                 setUserData((prevData) =>
                     prevData.map((user) => ({
                         ...user,
                         value: response.data?.user[user.id] || "",
                     }))
-                )
+                );
 
-                setLoading(false)
+                setLoading(false);
             } catch (error) {
-                console.log(error)
-                setLoading(false)
+                console.log(error);
+                setLoading(false);
             }
-        }
+        };
 
-        fetchUserData()
-    }, [id])
+        fetchUserData();
+    }, [id]);
 
     const handleClick = (index) => {
         setUserData((prevData) => {
-            const updatedData = [...prevData]
-            const field = updatedData[index]
-            field.editing = true
-            return updatedData
-        })
-    }
+            const updatedData = [...prevData];
+            const field = updatedData[index];
+            field.editing = true;
+            return updatedData;
+        });
+    };
 
     const handleInputChange = (index, value) => {
         setUserData((prevData) => {
-            const updatedData = [...prevData]
-            const field = updatedData[index]
-            field.value = value
-            return updatedData
-        })
-    }
+            const updatedData = [...prevData];
+            const field = updatedData[index];
+            field.value = value;
+            return updatedData;
+        });
+    };
 
     const handleSave = async (index) => {
-        const field = userData[index]
-        const { value: file } = field
+        const field = userData[index];
+        const { value: file } = field;
 
         setUserData((prevData) => {
-            const updatedData = [...prevData]
-            const field = updatedData[index]
-            field.editing = false
-            return updatedData
-        })
+            const updatedData = [...prevData];
+            const field = updatedData[index];
+            field.editing = false;
+            return updatedData;
+        });
 
         if (field.type === "file" && file) {
             try {
-                const uploadData = new FormData()
-                uploadData.append("file", file)
-                uploadData.append("upload_preset", "upload_hotel_booking")
-                setLoadingImage(true)
+                const uploadData = new FormData();
+                uploadData.append("file", file);
+                uploadData.append("upload_preset", "upload_hotel_booking");
+                setLoadingImage(true);
 
                 const response = await axios.post(
                     "https://api.cloudinary.com/v1_1/wakai-megumi/image/upload",
                     uploadData
-                )
+                );
 
-                const imageUrl = response.data.url
-                // await deleteImage(userData[0].value);
+                const imageUrl = response.data.url;
 
                 setUserData((prevData) => {
-                    const updatedData = [...prevData]
-                    const field = updatedData[index]
-                    field.value = imageUrl
-                    return updatedData
-                })
-                setLoadingImage(false)
+                    const updatedData = [...prevData];
+                    const field = updatedData[index];
+                    field.value = imageUrl;
+                    return updatedData;
+                });
+                setLoadingImage(false);
             } catch (error) {
-                console.log(error)
-                setLoadingImage(false)
+                console.log(error);
+                setLoadingImage(false);
             }
         }
-    }
+    };
+
+    const navigate = useNavigate();
 
     const handleSaveAll = async () => {
         try {
-            setUpdateSuccess(true)
+            setUpdateSuccess(true);
             const response = await axios.put(
                 `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/update/${userid}`,
                 {
@@ -175,39 +178,42 @@ const UserProfile = () => {
                 {
                     withCredentials: true,
                 }
-            )
-            console.log(response)
+            );
+            console.log(response);
             setTimeout(() => {
-                setUpdateSuccess(false)
-            }, 3000)
-            const currentUser = JSON.parse(localStorage.getItem("currentUser"))
-            console.log(currentUser)
+                setUpdateSuccess(false);
+            }, 3000);
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            console.log(currentUser);
 
             if (currentUser._id === response?.data?._id) {
                 localStorage.setItem(
                     "currentUser",
                     JSON.stringify(response?.data?.user)
-                )
+                );
             }
 
-            console.log(response.data.user)
+            console.log(response.data.user);
             toast.success("Profile updated successfully!", {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
-            })
+            });
+            navigate("/admin-dashboard/users");
         } catch (error) {
-            setUpdateSuccess(false)
-            console.log(error)
+            setUpdateSuccess(false);
+            console.log(error);
         }
-    }
+    };
+
     return (
-        <div className="user">
+        <div className="user-profile">
+            <h2>User Profile</h2>
             {loading ? (
-                <Spinner />
+                <Spinner fullScreen />
             ) : (
                 <>
-                    <div className="wrapper">
+                    <div className="profilewrapper">
                         <table>
                             <tbody>
                                 {userData.map((user, index) => (
@@ -281,7 +287,7 @@ const UserProfile = () => {
                                                         title="Edit"
                                                         onClick={() => handleClick(index)}
                                                     >
-                                                        Edit
+                                                        <FaEdit />
                                                     </button>
                                                 </td>
                                             </>
@@ -300,6 +306,7 @@ const UserProfile = () => {
                             padding: "5px",
                             backgroundColor: "green",
                             color: "white",
+                            marginTop: "20px",
                         }}
                         disabled={updateSuccess || loadingImage}
                         onClick={handleSaveAll}
@@ -309,7 +316,7 @@ const UserProfile = () => {
                 </>
             )}
         </div>
-    )
+    );
 }
 
-export default UserProfile
+export default UserProfile;

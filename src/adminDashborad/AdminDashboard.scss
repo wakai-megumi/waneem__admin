@@ -11,18 +11,26 @@
       flex-shrink: 0;
       position: fixed;
       left: 0;
-      // z-index: 0;
       top: 0;
       height: 100vh;
       overflow-y: auto;
       background-color: #f2f2f2;
       padding: 20px;
+
+      @media (max-width: 768px) {
+        display: none;
+      }
     }
 
     &__content {
       flex-grow: 1;
-      margin: 2rem 0 0 300px;
+      margin: 2rem 0 0 250px;
       padding: 20px;
+
+      @media (max-width: 768px) {
+        margin: 2rem 0 0 0;
+        width: 100%;
+      }
     }
   }
 }

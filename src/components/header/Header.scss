@@ -18,12 +18,20 @@
     color: #333;
   }
 
+  .sidebar-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
   .navigation {
+    display: none;
     ul {
       list-style: none;
       display: flex;
       justify-content: space-between;
-      gap: 7 rem;
+      gap: 7rem;
+
       li {
         margin-right: 10px;
 
@@ -44,6 +52,7 @@
     display: flex;
     align-items: center;
     margin: 0 6rem 0 0;
+    flex-direction: row;
 
     .username {
       margin-right: 10px;
@@ -76,6 +85,34 @@
 
   @media screen and (max-width: 768px) {
     .navigation {
+      display: block;
+      ul {
+        flex-direction: column;
+        gap: 4px;
+      }
+    }
+
+    .sidebar-toggle {
+      display: block;
+    }
+
+    .user-profile {
+      flex-direction: column;
+      gap: 5px;
+      .username {
+        display: none;
+      }
+    }
+    .navigation.open {
+      display: block;
+      position: fixed;
+      top: 80px;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 80px);
+      background-color: #f0f0f0;
+      padding: 20px;
+
       ul {
         flex-direction: column;
 
@@ -83,12 +120,6 @@
           margin-right: 0;
           margin-bottom: 10px;
         }
-      }
-    }
-
-    .user-profile {
-      .username {
-        display: none;
       }
     }
   }

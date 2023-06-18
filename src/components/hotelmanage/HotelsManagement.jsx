@@ -4,6 +4,7 @@ import axios from "axios";
 import "./Hotelmanagement.scss";
 import { useNavigate } from "react-router-dom";
 import nodata from "../../assets/no-photo.png";
+import Spinner from "../../utils/spinner/Spinner";
 
 const HotelsManagement = () => {
     const { data, error, isPending, refetch } = useFetch(
@@ -68,38 +69,13 @@ const HotelsManagement = () => {
                                     data?.hotels?.length === 0 && <h1>No hotels in the database</h1>
                                 }
                                 <td colSpan="6">
-                                    <div className="skeleton-container">
-                                        <div className="skeleton-row">
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                        </div>
-                                        <div className="skeleton-row">
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                        </div>
-                                        <div className="skeleton-row">
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                            <div className="skeleton-item"></div>
-                                        </div>
-                                    </div>
+                                    <Spinner />
                                 </td>
                             </tr>
                         </>
                     ) : error ? (
                         <tr>
-                            <td colSpan="6">{error?.response?.data?.message}please refresh the page</td>
+                            <td colSpan="6">{error?.response}please refresh the page</td>
                         </tr>
                     ) : (
                         data?.hotels?.map((hotel) => (
@@ -124,8 +100,8 @@ const HotelsManagement = () => {
                                 <td>{hotel.type}</td>
                                 <td>{hotel.title}</td>
                                 <td>{hotel.city}</td>
-                                <td className="btns">
-                                    <button
+                                <td >
+                                    <div className="btns">   <button
                                         className="view-button"
                                         onClick={() =>
                                             navigate("/admin-dashboard/hotel_profile", {
@@ -135,12 +111,13 @@ const HotelsManagement = () => {
                                     >
                                         View
                                     </button>
-                                    <button
-                                        className="delete-button"
-                                        onClick={() => handleHotelDelete(hotel._id)}
-                                    >
-                                        Delete
-                                    </button>
+                                        <button
+                                            className="delete-button"
+                                            onClick={() => handleHotelDelete(hotel._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))

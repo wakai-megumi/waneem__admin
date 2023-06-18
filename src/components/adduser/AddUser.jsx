@@ -127,17 +127,20 @@ const AddUser = () => {
             alert('Please provide all details');
         } else {
             try {
+                setLoading(true)
                 const response = await axios.post(
                     `${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/auth/register`,
                     formData,
                     { withCredentials: true }
                 );
-
+                setLoading(false)
                 toast.success('User added successfully');
                 navigate('/admin-dashboard/users')
             } catch (err) {
                 console.log(err);
+                setLoading(false)
                 if (err.response.data.message === `User with email ${formData.username} already exists`) {
+
                     toast.error(err.response.data.message)
                 }
             }

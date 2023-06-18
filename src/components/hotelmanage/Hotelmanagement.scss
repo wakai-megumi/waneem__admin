@@ -1,9 +1,9 @@
 .hotels-container {
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   height: 100%;
   background-color: #fbf6f6;
-  font-family: Arial, sans-serif;
 
   .hotels-heading {
     font-size: 36px;
@@ -13,6 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    animation: fadeInDown 0.5s ease-in-out;
   }
 
   .add-new-button {
@@ -24,6 +25,11 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+
+    &:hover {
+      background-color: #235a92;
+    }
   }
 
   .hotel-details {
@@ -31,7 +37,7 @@
     border-collapse: collapse;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #fff;
-    position: relative;
+    animation: fadeIn 0.5s ease-in-out;
 
     th,
     td {
@@ -45,24 +51,51 @@
       font-weight: bold;
     }
 
-    .image {
-      display: flex;
-      align-items: center;
+    tbody {
+      tr {
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover {
+          background-color: #edecec;
+        }
+      }
+    }
+
+    .hotel-row {
+      &.scrollable {
+        position: relative;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 15px;
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0),
+            #fff 90%
+          );
+        }
+      }
+    }
+
+    .hotel-row.scrollable td {
+      white-space: nowrap;
     }
 
     .hotel-image {
-      width: 30px;
-      height: 30px;
+      width: 50px;
+      height: 50px;
       margin-right: 10px;
       border-radius: 50%;
       vertical-align: middle;
     }
 
-    .hotel-name {
-      font-weight: bold;
-    }
-
-    .action-buttons {
+    .btns {
       display: flex;
       gap: 5px;
     }
@@ -77,6 +110,11 @@
       outline: none;
       margin: 0 1rem;
       cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
 
     .view-button {
@@ -88,19 +126,18 @@
       background-color: #d9534f;
       color: #fff;
     }
-
-    tr:hover {
-      background-color: #f9f9f9;
-    }
-
-    .btns {
-      display: flex;
-      align-items: center;
-    }
   }
 
   @media (max-width: 768px) {
-    table.hotel-details {
+    .hotels-heading {
+      font-size: 24px;
+    }
+
+    .add-new-button {
+      font-size: 14px;
+    }
+
+    .hotel-details {
       th,
       td {
         padding: 10px;
@@ -108,12 +145,12 @@
       }
 
       .hotel-image {
-        width: 20px;
-        height: 20px;
+        width: 30px;
+        height: 30px;
         margin-right: 5px;
       }
 
-      .action-buttons {
+      .btns {
         gap: 2px;
       }
 
@@ -124,36 +161,25 @@
     }
   }
 
-  .skeleton {
-    background-color: #f2f2f2;
-    border-radius: 4px;
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .skeleton-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-  }
-
-  .skeleton-row {
-    display: flex;
-    align-items: center;
-  }
-
-  .skeleton-item {
-    flex: 1;
-    height: 20px;
-    margin-bottom: 10px;
-  }
-
-  .skeleton-item:last-child {
-    margin-bottom: 0;
-  }
-
-  .skeleton-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

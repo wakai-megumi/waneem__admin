@@ -32,6 +32,9 @@ const Header = () => {
                         <li>
                             <Link to="/admin-dashboard/hotels">Hotels</Link>
                         </li>
+                        <li>
+                            <Link to="/admin-dashboard/room">Rooms</Link>
+                        </li>
                     </ul>
                 </nav>
                 <div className="user-profile">

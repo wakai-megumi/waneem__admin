@@ -34,7 +34,6 @@ const TotalBookings = () => {
 
             }
 
-            console.log(response?.data?.bookings);
 
 
         } catch (error) {
@@ -126,6 +125,9 @@ const TotalBookings = () => {
                 <div className="booking-gallery">
                     <h3>Pending Bookings</h3>
                     <div className="gallery-container">
+                        {
+                            bookingGallery.length === 0 && <p>No pending bookings</p>
+                        }
                         {bookingGallery.map((booking) => (
                             <BookingCard key={booking._id} booking={booking} handleStatus={handleStatus} handleRemoveBooking={handleRemoveBooking} />
                         ))}

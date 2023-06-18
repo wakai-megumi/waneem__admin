@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.scss';
 import { Authcontext } from '../../context/Authcontext';
 import axios from "axios"
+import Spinner from '../../utils/spinner/Spinner';
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
 
-    const [E, setE] = useState(true)
     const navigate = useNavigate();
     const { currentUser, loading, error, dispatch } = useContext(Authcontext)
 
@@ -30,14 +30,12 @@ const Login = () => {
                         "Content-Type": "application/json",
                     },
                 })
-            const cookieValue = document.cookie
-                .split(';')
-                .map(cookie => cookie.trim())
-                .find(cookie => cookie.startsWith('access_token='))
-                ?.split('=')[1];
+            // const cookieValue = document.cookie
+            //     .split(';')
+            //     .map(cookie => cookie.trim())
+            //     .find(cookie => cookie.startsWith('access_token='))
+            //     ?.split('=')[1];
 
-            console.log(cookieValue, "in login way ");
-            console.log(res.headers, "in login setup");
             if (res?.data?.user?.isAdmin) {
                 dispatch({ type: "LOGIN_SUCCESS", payload: { user: res?.data?.user } })
 
@@ -53,36 +51,43 @@ const Login = () => {
 
         }
     };
-
     return (
         <div className="login-container">
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input
-                        type="text"
-                        id="email"
-                        name="email"
-                        value={credentials.email}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={credentials.password}
-                        onChange={handleInputChange}
-                    />
-                </div>
-                <button type="submit" className='btn'>Login</button>
-                <span className='error'>{error && error?.message}</span>
-            </form>
-        </div>
+            <h2>Admin Login Portal</h2>
+
+            {
+                loading ? <Spinner /> : <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="text"
+                            id="email"
+                            name="email"
+                            value={credentials.email}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={credentials.password}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+                    <button type="submit" className='btn'>Login</button>
+                    {
+                        error ? <div className="error">{error.message}</div> : null
+                    }
+                    <a className="link" href="https://waneem.onrender.com" target="_blank" rel="noopener noreferrer" style={{ color: 'green', margin: '2rem 4.5rem' }}>Login as user</a>
+
+                </form >
+            }
+
+        </div >
     );
 };
 
-export default Login;
+export default Login

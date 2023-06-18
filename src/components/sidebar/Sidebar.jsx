@@ -1,11 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import "./Sidebar.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { Authcontext } from "../../context/Authcontext";
+import { toast } from "react-toastify";
 const Sidebar = () => {
     const { currentUser } = useContext(Authcontext);
     const navigate = useNavigate()
-    console.log(currentUser)
+
+
+    const handleupcomingfeature = () => {
+        toast.info('this feature is still in development phase')
+    }
     return (
         <div className="sidebar">
             <h2>Main Title</h2>
@@ -20,13 +25,13 @@ const Sidebar = () => {
             </ul>
             <h2>Useful</h2>
             <ul>
-                <li><Link href="/stats" >Stats</Link></li>
-                <li><Link href="/notifications">Notifications</Link></li>
+                <li><Link onClick={handleupcomingfeature}>Stats</Link></li>
+                <li><Link onClick={handleupcomingfeature}>Notifications</Link></li>
             </ul>
             <h2>Service</h2>
             <ul>
-                <li><Link href="/logs">Logs</Link></li>
-                <li><Link href="/settings">Settings</Link></li>
+                <li><Link onClick={handleupcomingfeature}>Logs</Link></li>
+                <li><Link onClick={handleupcomingfeature}>Settings</Link></li>
             </ul>
             <h2>User</h2>
             <ul>

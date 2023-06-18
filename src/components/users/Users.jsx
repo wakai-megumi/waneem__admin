@@ -4,6 +4,7 @@ import useFetch from "../../customhooks/useFetch"
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import noavatar from '../../assets/noavatar.jpg'
+import Spinner from '../../utils/spinner/Spinner';
 const Users = () => {
     const [UserData, setUserData] = React.useState([])
     const { data, error, loading, refetch } = useFetch(`${import.meta.env.VITE_REACT_SERVER_URL}/api/v1/user/all`)
@@ -55,8 +56,8 @@ const Users = () => {
                 </thead>
                 <tbody>
                     {loading ? (
-                        <tr>
-                            <td colSpan="7">Loading...</td>
+                        <tr className='spinner contanier'>
+                            <Spinner />
                         </tr>
                     ) : error ? (
                         <tr>

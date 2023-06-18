@@ -1,9 +1,9 @@
 .rooms-container {
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   height: 100%;
   background-color: #fbf6f6;
-  font-family: Arial, sans-serif;
 
   .rooms-heading {
     font-size: 36px;
@@ -13,6 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    animation: fadeInDown 0.5s ease-in-out;
   }
 
   .add-new-button {
@@ -24,6 +25,11 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+
+    &:hover {
+      background-color: #235a92;
+    }
   }
 
   .room-details {
@@ -31,6 +37,7 @@
     border-collapse: collapse;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: #fff;
+    animation: fadeIn 0.5s ease-in-out;
 
     th,
     td {
@@ -44,21 +51,43 @@
       font-weight: bold;
     }
 
-    .room-image {
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-      border-radius: 50%;
-      vertical-align: middle;
+    tbody {
+      max-height: 300px;
+      overflow-y: auto;
+
+      tr {
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover {
+          background-color: #edecec;
+        }
+      }
     }
 
-    .room-name {
-      font-weight: bold;
+    .room-row {
+      &.scrollable {
+        position: relative;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          width: 15px;
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0),
+            #fff 90%
+          );
+        }
+      }
     }
 
-    .action-buttons {
-      display: flex;
-      gap: 5px;
+    .room-row.scrollable td {
+      white-space: nowrap;
     }
 
     .view-button,
@@ -71,6 +100,11 @@
       outline: none;
       margin: 0 1rem;
       cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+
+      &:hover {
+        opacity: 0.8;
+      }
     }
 
     .view-button {
@@ -83,12 +117,24 @@
       color: #fff;
     }
 
-    tr:hover {
-      background-color: #f9f9f9;
+    .spinner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 
   @media (max-width: 768px) {
+    .rooms-heading {
+      font-size: 24px;
+    }
+
+    .add-new-button {
+      font-size: 14px;
+    }
+
     .room-details {
       th,
       td {
@@ -96,20 +142,32 @@
         font-size: 14px;
       }
 
-      .room-image {
-        width: 20px;
-        height: 20px;
-        margin-right: 5px;
-      }
-
-      .action-buttons {
-        gap: 2px;
-      }
-
       .view-button,
       .delete-button {
         font-size: 12px;
       }
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    0% {
+      opacity: 0;
+      transform: translateY(-40px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }

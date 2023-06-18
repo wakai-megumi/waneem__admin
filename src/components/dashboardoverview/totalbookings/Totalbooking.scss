@@ -63,8 +63,8 @@
     .booking-card {
       background-color: #fff;
       padding: 10px;
-      max-width: 200px;
       border-radius: 5px;
+      max-width: fit-content;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       p {
         margin: 0;
