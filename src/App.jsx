@@ -12,7 +12,7 @@ import AddUser from './components/adduser/AddUser.jsx';
 import AddHotel from './components/addhotel/Addhotel.jsx';
 import Addroom from './components/addroom/Addroom.jsx';
 import UserProfile from './profile/Profile.jsx';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import HotelProfile from './components/hotelProfile/HotelProfile.jsx';
 import EditHotel from './components/hotelmanage/editHotel/EditHotel.jsx';
 import { BsArrowLeft } from 'react-icons/bs'
@@ -34,11 +34,18 @@ const App = () => {
       <div className="back-button-container">
         <button className="back-button" onClick={goBack}>
           <BsArrowLeft />
-
         </button>
       </div>
     );
   };
+
+  // Error handling for buffering timeout
+  const handleBufferingTimeoutError = (error) => {
+    if (error?.response?.data?.message === 'Operation `rooms.insertOne()` buffering timed out after 10000ms') {
+      toast.error('Server is down. Please try again later.');
+    }
+  };
+
   return (
     <Router>
       <Routes>
@@ -46,14 +53,12 @@ const App = () => {
         {isadmin ? (
           <>
             <Route path="/" element={<Navigate to="/admin-dashboard" />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />}>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} onError={handleBufferingTimeoutError}>
               <Route path="/admin-dashboard" element={<DashboardOverview />} />
               <Route path="/admin-dashboard/users" element={<Users />} />
 
-
               <Route path={`/admin-dashboard/profile/`} element={<UserProfile />} />
               <Route path={`/admin-dashboard/hotel_profile/`} element={<HotelProfile />} />
-
 
               <Route path="/admin-dashboard/hotels" element={<HotelsManagement />} />
               <Route path="/admin-dashboard/hotel_profile/edithotel" element={<EditHotel />} />

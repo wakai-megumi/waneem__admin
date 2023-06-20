@@ -63,6 +63,11 @@
         }
       }
     }
+    .image {
+      display: flex;
+      flex-direction: column;
+      margin: 9px 0 0 0;
+    }
 
     .user-image {
       width: 30px;
