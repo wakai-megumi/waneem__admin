@@ -54,6 +54,7 @@ const Login = () => {
     return (
         <div className="login-container">
             <h2>Admin Login Portal</h2>
+            <h3> this is in testing phase , so you can use credentaials <br /> admin-1@gmail.com pwd:admin123456</h3>
 
             {
                 loading ? <Spinner /> : <form onSubmit={handleSubmit}>

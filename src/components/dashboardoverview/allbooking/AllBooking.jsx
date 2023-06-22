@@ -78,7 +78,6 @@ const TotalBookings = () => {
                     }
                 }, {
                     withCredentials: true,
-                    httpOnly: true,
                 });
                 console.log(res)
             }
