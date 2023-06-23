@@ -11,10 +11,11 @@ import { FaEdit } from 'react-icons/fa';
 import { useLocation, useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
-    const { currentUser } = useContext(Authcontext);
+    const { currentUser, dispatch } = useContext(Authcontext);
     const [loading, setLoading] = useState(true);
     const [loadingImage, setLoadingImage] = useState(false);
     const [updateSuccess, setUpdateSuccess] = useState(false);
+    const [uploadRequest, setUploadRequest] = useState(null);
 
     const noavatarAlt = "Image by pikisuperstar -- www.freepik.com"; /////---------------noavatar alt
 
@@ -118,6 +119,49 @@ const UserProfile = () => {
             return updatedData;
         });
     };
+    //image resizing function 
+
+    const resizeImage = (file, maxWidth, maxHeight) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+
+            img.onload = () => {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                canvas.toBlob(
+                    (blob) => {
+                        resolve(blob);
+                    },
+                    file.type,
+                    0.7
+                );
+            };
+
+            img.onerror = reject;
+
+            img.src = URL.createObjectURL(file);
+        });
+    };
 
     const handleSave = async (index) => {
         const field = userData[index];
@@ -133,10 +177,14 @@ const UserProfile = () => {
         if (field.type === "file" && file) {
             try {
                 const uploadData = new FormData();
-                uploadData.append("file", file);
+                const resizedblob = await resizeImage(file, 800, 600)
+
+                uploadData.append("file", resizedblob);
                 uploadData.append("upload_preset", "upload_hotel_booking");
                 setLoadingImage(true);
-
+                const cancelToken = axios.CancelToken;
+                const source = cancelToken.source();
+                setUploadRequest(source);
                 const response = await axios.post(
                     "https://api.cloudinary.com/v1_1/wakai-megumi/image/upload",
                     uploadData
@@ -151,13 +199,24 @@ const UserProfile = () => {
                     return updatedData;
                 });
                 setLoadingImage(false);
-            } catch (error) {
-                console.log(error);
+            } catch (err) {
                 setLoadingImage(false);
+
+                if (axios.isCancel(err)) {
+                    console.log('Image upload canceled:', err.message);
+                } else {
+                    console.log(err);
+                }
             }
         }
     };
 
+    //image take too long so we can cancel the image upload
+    const cancelImageUpload = () => {
+        if (uploadRequest) {
+            uploadRequest.cancel('Image upload canceled by user');
+        }
+    };
     const navigate = useNavigate();
 
     const handleSaveAll = async () => {
@@ -193,7 +252,8 @@ const UserProfile = () => {
                 );
             }
 
-            console.log(response.data.user);
+            console.log(response?.data?.user);
+            dispatch({ type: "LOGIN_SUCCESS", payload: { user: response?.data?.user } })
             toast.success("Profile updated successfully!", {
                 position: "top-right",
                 autoClose: 2000,
@@ -282,13 +342,33 @@ const UserProfile = () => {
                                                     <td className="info-value">{user.value}</td>
                                                 )}
                                                 <td>
-                                                    <button
-                                                        className="edit-button"
-                                                        title="Edit"
-                                                        onClick={() => handleClick(index)}
-                                                    >
-                                                        <FaEdit />
-                                                    </button>
+                                                    {
+                                                        user.id === "profileimage" ?
+                                                            <>
+                                                                {
+                                                                    loadingImage ?
+                                                                        <button type="button" onClick={cancelImageUpload}>Cancel Upload</button>
+                                                                        :
+                                                                        <button
+                                                                            className="edit-button"
+                                                                            title="Edit"
+                                                                            onClick={() => handleClick(index)}
+                                                                        >
+                                                                            <FaEdit />
+                                                                        </button>
+                                                                }
+
+                                                            </>
+                                                            :
+                                                            <button
+                                                                className="edit-button"
+                                                                title="Edit"
+                                                                onClick={() => handleClick(index)}
+                                                            >
+                                                                <FaEdit />
+                                                            </button>
+
+                                                    }
                                                 </td>
                                             </>
                                         )}

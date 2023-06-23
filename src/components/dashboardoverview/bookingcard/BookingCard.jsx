@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const BookingCard = ({ booking, handleStatus, handleRemoveBooking }) => {
     const [expanded, setExpanded] = useState(false);
-    const { _id, checkInDate, checkOutDate, guests, status, user, hotelName } = booking;
+    const { _id, checkInDate, checkOutDate, guests, status, user, hotelName, TotalPrice, ReservationAmount } = booking;
 
     const toggleExpand = () => {
         setExpanded(!expanded);
@@ -58,6 +58,9 @@ const BookingCard = ({ booking, handleStatus, handleRemoveBooking }) => {
                         <p>User: {user}</p>
                         <p>Status: {status}</p>
                         <p>HotelName: {hotelName}</p>
+                        <p>TotalPrice: {TotalPrice}</p>
+                        <p>ReservationAmount: {ReservationAmount}</p>
+
 
 
                     </div>
@@ -86,6 +89,9 @@ BookingCard.propTypes = {
         guests: PropTypes.number.isRequired,
         status: PropTypes.string.isRequired,
         user: PropTypes.string.isRequired,
+        hotelName: PropTypes.string.isRequired,
+        TotalPrice: PropTypes.number.isRequired,
+        ReservationAmount: PropTypes.number.isRequired,
     }).isRequired,
     handleStatus: PropTypes.func.isRequired,
     handleRemoveBooking: PropTypes.func.isRequired,

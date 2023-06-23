@@ -51,6 +51,8 @@ const Login = () => {
 
         }
     };
+
+
     return (
         <div className="login-container">
             <h2>Admin Login Portal</h2>
@@ -82,7 +84,7 @@ const Login = () => {
                     {
                         error ? <div className="error">{error.message}</div> : null
                     }
-                    <a className="link" href="https://waneem.onrender.com" target="_blank" rel="noopener noreferrer" style={{ color: 'green', margin: '2rem 4.5rem' }}>Login as user</a>
+                    <a className="link" href="https://waneem.onrender.com" target="_blank" rel="noopener noreferrer" style={{ color: 'green', margin: '2rem 4.5rem' }}> As user</a>
 
                 </form >
             }
